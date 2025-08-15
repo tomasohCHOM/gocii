@@ -35,7 +35,7 @@ func main() {
 }
 
 func convertToASCII(img image.Image) string {
-	// asciiChars := "@#%XO+=:-. "
+	// Inverted for dark theme terminal
 	asciiChars := " .-:=+OX%#@"
 	lookup := createASCIILookup(asciiChars)
 	bounds := img.Bounds()
@@ -45,12 +45,12 @@ func convertToASCII(img image.Image) string {
 	result := make([]string, height)
 	var wg sync.WaitGroup
 
-	for y := 0; y < height; y++ {
+	for y := range height {
 		wg.Add(1)
 		go func(y int) {
 			defer wg.Done()
 			line := ""
-			for x := 0; x < width; x++ {
+			for x := range width {
 				color := color.GrayModel.Convert(img.At(x, y)).(color.Gray)
 				line += string(lookup[color.Y])
 			}
@@ -64,7 +64,7 @@ func convertToASCII(img image.Image) string {
 
 func createASCIILookup(asciiChars string) []rune {
 	lookup := make([]rune, 256)
-	for i := 0; i < 256; i++ {
+	for i := range 256 {
 		index := i * (len(asciiChars) - 1) / 255
 		lookup[i] = rune(asciiChars[index])
 	}
