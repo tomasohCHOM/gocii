@@ -7,7 +7,6 @@ import (
 	"image/png"
 	"os"
 	"strings"
-	"sync"
 
 	"github.com/nfnt/resize"
 )
@@ -27,15 +26,16 @@ func main() {
 	}
 
 	// Resize the image
-	img = resize.Resize(400, 0, img, resize.Lanczos3)
+	img = resize.Resize(400, 200, img, resize.Lanczos3)
 
 	// Convert to ASCII
 	ascii := convertToASCII(img)
+	fmt.Println(strings.Index(ascii, "\n"))
+	fmt.Println(len(ascii))
 	fmt.Println(ascii)
 }
 
 func convertToASCII(img image.Image) string {
-	// Inverted for dark theme terminal
 	asciiChars := " .-:=+OX%#@"
 	lookup := createASCIILookup(asciiChars)
 	bounds := img.Bounds()
@@ -43,22 +43,16 @@ func convertToASCII(img image.Image) string {
 	width := bounds.Dx()
 
 	result := make([]string, height)
-	var wg sync.WaitGroup
 
 	for y := range height {
-		wg.Add(1)
-		go func(y int) {
-			defer wg.Done()
-			line := ""
-			for x := range width {
-				color := color.GrayModel.Convert(img.At(x, y)).(color.Gray)
-				line += string(lookup[color.Y])
-			}
-			result[y] = line
-		}(y)
+		var line strings.Builder
+		for x := range width {
+			color := color.GrayModel.Convert(img.At(x, y)).(color.Gray)
+			line.WriteString(string(lookup[color.Y]))
+		}
+		result[y] = line.String()
 	}
 
-	wg.Wait()
 	return joinLines(result)
 }
 
