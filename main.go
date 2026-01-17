@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"image"
 	_ "image/jpeg"
 	_ "image/png"
@@ -37,7 +36,7 @@ func main() {
 	ascii := imageToAscii(img, *invert)
 
 	if !*noprint {
-		fmt.Printf("%s", ascii)
+		log.Printf("%s", ascii)
 	}
 
 	if *out != "" {

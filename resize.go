@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"image"
 
 	"github.com/nfnt/resize"
@@ -25,8 +24,6 @@ func handleResizing(img image.Image, w uint) image.Image {
 	if h == 0 {
 		h = 1
 	}
-
-	fmt.Println(w, h)
 
 	return resize.Resize(w, h, img, resize.Lanczos3)
 }
