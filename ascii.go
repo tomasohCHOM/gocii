@@ -7,17 +7,7 @@ import (
 
 const DEPTH = 256
 
-func asciiLookup(asciiChars string) []byte {
-	lookup := make([]byte, DEPTH)
-	for i := range DEPTH {
-		idx := i * (len(asciiChars) - 1) / (DEPTH - 1)
-		lookup[i] = byte(asciiChars[idx])
-	}
-
-	return lookup
-}
-
-func ImageToAscii(img image.Image, invert bool) []byte {
+func imageToAscii(img image.Image, invert bool) []byte {
 	asciiChars := "@#%XO+=:-. "
 	if invert {
 		asciiChars = " .-:=+OX%#@"
@@ -36,4 +26,14 @@ func ImageToAscii(img image.Image, invert bool) []byte {
 		result = append(result, '\n')
 	}
 	return result
+}
+
+func asciiLookup(asciiChars string) []byte {
+	lookup := make([]byte, DEPTH)
+	for i := range DEPTH {
+		idx := i * (len(asciiChars) - 1) / (DEPTH - 1)
+		lookup[i] = byte(asciiChars[idx])
+	}
+
+	return lookup
 }
