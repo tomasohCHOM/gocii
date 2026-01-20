@@ -23,7 +23,9 @@ func imageToAscii(img image.Image, invert bool) []byte {
 			color := color.GrayModel.Convert(img.At(c, r)).(color.Gray)
 			result = append(result, lookup[color.Y])
 		}
-		result = append(result, '\n')
+		if r < M-1 {
+			result = append(result, '\n')
+		}
 	}
 	return result
 }
